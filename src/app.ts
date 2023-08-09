@@ -8,7 +8,7 @@ import authorRoutes from "./routes/authorRoutes";
 import cors from "cors";
 
 const app = express();
-
+console.log("hiii");
 // Middleware
 app.use(bodyParser.json());
 app.use(express.json());
