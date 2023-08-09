@@ -2,20 +2,19 @@
 import { config } from "dotenv";
 config();
 import express from "express";
-import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import authorRoutes from "./routes/authorRoutes";
+import tagRoutes from "./routes/tagRoutes";
 import cors from "cors";
 
 const app = express();
-console.log("hiii");
 // Middleware
-app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 // Routes
 app.use("/api", authorRoutes);
+app.use("/api", tagRoutes);
 
 // Connect to MongoDB
 const conncetDB = async () => {
@@ -27,6 +26,7 @@ const conncetDB = async () => {
   }
 };
 conncetDB();
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

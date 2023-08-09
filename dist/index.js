@@ -16,18 +16,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 const express_1 = __importDefault(require("express"));
-const body_parser_1 = __importDefault(require("body-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const authorRoutes_1 = __importDefault(require("./routes/authorRoutes"));
+const tagRoutes_1 = __importDefault(require("./routes/tagRoutes"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-console.log("hiii");
 // Middleware
-app.use(body_parser_1.default.json());
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({ origin: "*" }));
 // Routes
 app.use("/api", authorRoutes_1.default);
+app.use("/api", tagRoutes_1.default);
 // Connect to MongoDB
 const conncetDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
