@@ -5,11 +5,14 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import authorRoutes from "./routes/authorRoutes";
+import cors from "cors";
 
 const app = express();
 
 // Middleware
 app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 // Routes
 app.use("/api", authorRoutes);
