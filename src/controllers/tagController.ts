@@ -3,9 +3,9 @@ import Tag, { Itag } from "../models/Tag";
 
 export const createTag = async (req: Request, res: Response) => {
   try {
-    const { name, status } = req.body;
+    const { tagName, status } = req.body;
     const tag = new Tag({
-      name,
+      tagName,
       status,
     });
     const savedTag = await tag.save();

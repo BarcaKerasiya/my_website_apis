@@ -16,9 +16,9 @@ exports.updateTag = exports.getTagById = exports.getAllTags = exports.deleteTag 
 const Tag_1 = __importDefault(require("../models/Tag"));
 const createTag = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, status } = req.body;
+        const { tagName, status } = req.body;
         const tag = new Tag_1.default({
-            name,
+            tagName,
             status,
         });
         const savedTag = yield tag.save();

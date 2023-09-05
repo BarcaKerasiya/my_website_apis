@@ -5,16 +5,17 @@ import express from "express";
 import mongoose from "mongoose";
 import authorRoutes from "./routes/authorRoutes";
 import tagRoutes from "./routes/tagRoutes";
+import blogRoutes from "./routes/blogRoutes";
 import cors from "cors";
 
 const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({ origin: "*" }));
-
-// Routes
+// http://localhost:3000/api/authors
 app.use("/api", authorRoutes);
 app.use("/api", tagRoutes);
+app.use("/api", blogRoutes);
 
 // Connect to MongoDB
 const conncetDB = async () => {
