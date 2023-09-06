@@ -26,6 +26,12 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({ origin: "*" }));
 // http://localhost:3000/api/authors
+app.get("/", (_req, res) => {
+    return res.send("Express Typescript on Vercel");
+});
+app.get("/ping", (_req, res) => {
+    return res.send("pong 🏓");
+});
 app.use("/api", authorRoutes_1.default);
 app.use("/api", tagRoutes_1.default);
 app.use("/api", blogRoutes_1.default);
