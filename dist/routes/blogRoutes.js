@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const blogController_1 = require("../controllers/blogController");
 const router = express_1.default.Router();
+console.log("hii");
 router.post("/blogs", blogController_1.createBlog);
 router.delete("/blogs/:id", blogController_1.deleteBlog);
 router.get("/blogs", blogController_1.getAllBlogs);

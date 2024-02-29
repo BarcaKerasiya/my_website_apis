@@ -25,7 +25,9 @@ const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             tagIds,
             minutesToRead,
         });
+        console.log("up");
         const savedBlog = yield blog.save();
+        console.log("down", savedBlog);
         res.status(201).json(savedBlog);
     }
     catch (error) {
@@ -53,7 +55,15 @@ const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.deleteBlog = deleteBlog;
 const getAllBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const blogs = yield Blog_1.default.find();
+        const blogs = yield Blog_1.default.find()
+            .populate({
+            path: "authorIds",
+            select: "name jobTitle", // Populate only the 'name' field of the Author document
+        })
+            .populate({
+            path: "tagIds",
+            select: "tagName", // Populate only the 'tagName' field of the Tag document
+        });
         res.status(200).json(blogs);
     }
     catch (error) {
@@ -64,7 +74,15 @@ exports.getAllBlogs = getAllBlogs;
 const getBlogById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const blogId = req.params.id;
-        const blog = yield Blog_1.default.findById(blogId);
+        const blog = yield Blog_1.default.findById(blogId)
+            .populate({
+            path: "authorIds",
+            select: "name jobTitle", // Populate only the 'name' field of the Author document
+        })
+            .populate({
+            path: "tagIds",
+            select: "tagName", // Populate only the 'tagName' field of the Tag document
+        });
         if (!blog) {
             return res.status(404).json({ error: "Blog not found" });
         }
@@ -81,6 +99,15 @@ const updateBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const blogId = req.params.id;
         const updatedData = req.body; // Only update the provided fields
+        // Convert authorIds and tagIds to ObjectId instances
+        // updatedData.authorIds = updatedData.authorIds.map((id: string) =>
+        //   new mongoose.Types.ObjectId(id)
+        // );
+        // updatedData.tagIds = updatedData.tagIds.map((id: string) =>
+        //   new mongoose.Types.ObjectId(id)
+        // );
+        // console.log("blogId", blogId);
+        // console.log("updatedData", updatedData);
         const updatedBlog = yield Blog_1.default.findByIdAndUpdate(blogId, updatedData, {
             new: true, // Return the updated document
         });

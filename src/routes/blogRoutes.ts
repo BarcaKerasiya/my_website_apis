@@ -10,6 +10,7 @@ import {
 
 const router = express.Router();
 
+console.log("hii");
 router.post("/blogs", createBlog);
 router.delete("/blogs/:id", deleteBlog);
 router.get("/blogs", getAllBlogs);

@@ -5,13 +5,15 @@ import Author, { IAuthor } from "../models/Author";
 export const createAuthor = async (req: Request, res: Response) => {
   try {
     const { name, status, jobTitle } = req.body;
-    console.log(name, status, jobTitle);
+    // console.log(name, status, jobTitle);
     const author = new Author({
       name,
       status,
       jobTitle,
     });
+    // console.log("author", author);
     const savedAuthor = await author.save();
+    // console.log("savedAuthor", savedAuthor);
     res.status(201).json(savedAuthor);
   } catch (error) {
     res
@@ -24,12 +26,13 @@ export const deleteAuthor = async (req: Request, res: Response) => {
   try {
     const authorId = req.params.id;
     const deletedAuthor = await Author.findByIdAndDelete(authorId);
+    console.log("deletedAuthor", deletedAuthor);
 
     if (!deletedAuthor) {
       return res.status(404).json({ error: "Author not found" });
     }
 
-    res.status(204).json({ message: "Author deleted successfully" });
+    return res.status(200).json({ message: "Author deleted successfully" });
   } catch (error) {
     res
       .status(500)

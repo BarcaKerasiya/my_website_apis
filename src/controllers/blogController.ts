@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Blog, { IBlog } from "../models/Blog";
+import mongoose from "mongoose";
 
 export const createBlog = async (req: Request, res: Response) => {
   try {
@@ -13,7 +14,9 @@ export const createBlog = async (req: Request, res: Response) => {
       tagIds,
       minutesToRead,
     });
+    console.log("up");
     const savedBlog = await blog.save();
+    console.log("down", savedBlog);
     res.status(201).json(savedBlog);
   } catch (error) {
     res
@@ -40,7 +43,16 @@ export const deleteBlog = async (req: Request, res: Response) => {
 };
 export const getAllBlogs = async (req: Request, res: Response) => {
   try {
-    const blogs = await Blog.find();
+    const blogs = await Blog.find()
+      .populate({
+        path: "authorIds",
+        select: "name jobTitle", // Populate only the 'name' field of the Author document
+      })
+      .populate({
+        path: "tagIds",
+        select: "tagName", // Populate only the 'tagName' field of the Tag document
+      });
+
     res.status(200).json(blogs);
   } catch (error) {
     res.status(500).json({ error: "An error occurred while retrieving blogs" });
@@ -50,7 +62,15 @@ export const getAllBlogs = async (req: Request, res: Response) => {
 export const getBlogById = async (req: Request, res: Response) => {
   try {
     const blogId = req.params.id;
-    const blog = await Blog.findById(blogId);
+    const blog = await Blog.findById(blogId)
+      .populate({
+        path: "authorIds",
+        select: "name jobTitle", // Populate only the 'name' field of the Author document
+      })
+      .populate({
+        path: "tagIds",
+        select: "tagName", // Populate only the 'tagName' field of the Tag document
+      });
 
     if (!blog) {
       return res.status(404).json({ error: "Blog not found" });
@@ -69,6 +89,15 @@ export const updateBlog = async (req: Request, res: Response) => {
     const blogId = req.params.id;
     const updatedData: Partial<IBlog> = req.body; // Only update the provided fields
 
+    // Convert authorIds and tagIds to ObjectId instances
+    // updatedData.authorIds = updatedData.authorIds.map((id: string) =>
+    //   new mongoose.Types.ObjectId(id)
+    // );
+    // updatedData.tagIds = updatedData.tagIds.map((id: string) =>
+    //   new mongoose.Types.ObjectId(id)
+    // );
+    // console.log("blogId", blogId);
+    // console.log("updatedData", updatedData);
     const updatedBlog = await Blog.findByIdAndUpdate(blogId, updatedData, {
       new: true, // Return the updated document
     });

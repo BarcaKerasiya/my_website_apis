@@ -17,13 +17,15 @@ const Author_1 = __importDefault(require("../models/Author"));
 const createAuthor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, status, jobTitle } = req.body;
-        console.log(name, status, jobTitle);
+        // console.log(name, status, jobTitle);
         const author = new Author_1.default({
             name,
             status,
             jobTitle,
         });
+        // console.log("author", author);
         const savedAuthor = yield author.save();
+        // console.log("savedAuthor", savedAuthor);
         res.status(201).json(savedAuthor);
     }
     catch (error) {
@@ -37,10 +39,11 @@ const deleteAuthor = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const authorId = req.params.id;
         const deletedAuthor = yield Author_1.default.findByIdAndDelete(authorId);
+        console.log("deletedAuthor", deletedAuthor);
         if (!deletedAuthor) {
             return res.status(404).json({ error: "Author not found" });
         }
-        res.status(204).json({ message: "Author deleted successfully" });
+        return res.status(200).json({ message: "Author deleted successfully" });
     }
     catch (error) {
         res
