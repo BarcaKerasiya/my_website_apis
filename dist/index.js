@@ -39,7 +39,8 @@ app.use("/api", blogRoutes_1.default);
 // Connect to MongoDB
 const conncetDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(process.env.MONGO_URL);
+        const MONGO_URL = `mongodb+srv://BlueMarron:${process.env.MONGO_PASSWORD}@bluemarron.496xb.mongodb.net/my_website?retryWrites=true&w=majority`;
+        yield mongoose_1.default.connect(MONGO_URL);
         console.log("Connected to MongoDB");
     }
     catch (err) {
