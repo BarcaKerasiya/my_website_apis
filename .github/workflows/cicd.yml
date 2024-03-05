@@ -14,13 +14,13 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker Image
-        run: docker build -t vishnukerasiya/my-website-apis  .
+        run: docker build -t vishnukerasiyaa/my-website-apis  .
       - name: Publish Image to docker hub
         run: docker push vishnukerasiya/my-website-apis:latest
 
   deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: [aws-ec2-node]
     steps:
       - name: Pull image from docker hub
         run: docker pull vishnukerasiya/my-website-apis:latest
