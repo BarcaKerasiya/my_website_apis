@@ -14,7 +14,7 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker Image
-        run: docker build -t vishnukerasiyaa/my-website-apis  .
+        run: docker build -t vishnukerasiya/my-website-apis  .
       - name: Publish Image to docker hub
         run: docker push vishnukerasiya/my-website-apis:latest
 
