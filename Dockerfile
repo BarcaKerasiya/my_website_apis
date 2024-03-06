@@ -11,10 +11,23 @@ COPY package*.json ./
 RUN npm install
 
 # Bundle app source
-COPY . .
+# COPY . .
 
 # Expose the port on which the app will run
-EXPOSE 4000
+# EXPOSE 4000
 
 # Command to run the application
-CMD ["npm", "run", "start"]
+# CMD ["npm", "run", "start"]
+
+
+
+
+
+# Copy compiled JavaScript files and other necessary files
+COPY dist/ ./dist/
+COPY .env ./
+
+EXPOSE 5000
+
+CMD [ "node", "dist/index.js" ]
+
