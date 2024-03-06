@@ -25,7 +25,7 @@ RUN npm install
 
 # Copy compiled JavaScript files and other necessary files
 COPY dist/ ./dist/
-COPY .env ./
+# COPY .env ./
 
 EXPOSE 5000
 
