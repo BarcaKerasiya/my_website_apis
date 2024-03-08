@@ -42,8 +42,24 @@ export const deleteBlog = async (req: Request, res: Response) => {
   }
 };
 export const getAllBlogs = async (req: Request, res: Response) => {
+  const { search_query } = req.query;
   try {
-    const blogs = await Blog.find()
+    // Define the type of the query object
+    let query: { title?: RegExp } = {};
+    if (typeof search_query === "string") {
+      // Split the search query string by spaces
+      const searchWords = search_query.split(" ");
+
+      // Construct a regular expression to match each word individually
+      const regexPatterns = searchWords.map((word) => `(?=.*${word})`);
+      const regexString = regexPatterns.join("");
+
+      // Create the regular expression
+      query.title = new RegExp(regexString, "i");
+    }
+
+    console.log("query", query);
+    const blogs = await Blog.find(query)
       .populate({
         path: "authorIds",
         select: "name jobTitle", // Populate only the 'name' field of the Author document

@@ -54,8 +54,21 @@ const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.deleteBlog = deleteBlog;
 const getAllBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { search_query } = req.query;
     try {
-        const blogs = yield Blog_1.default.find()
+        // Define the type of the query object
+        let query = {};
+        if (typeof search_query === "string") {
+            // Split the search query string by spaces
+            const searchWords = search_query.split(" ");
+            // Construct a regular expression to match each word individually
+            const regexPatterns = searchWords.map((word) => `(?=.*${word})`);
+            const regexString = regexPatterns.join("");
+            // Create the regular expression
+            query.title = new RegExp(regexString, "i");
+        }
+        console.log("query", query);
+        const blogs = yield Blog_1.default.find(query)
             .populate({
             path: "authorIds",
             select: "name jobTitle", // Populate only the 'name' field of the Author document
