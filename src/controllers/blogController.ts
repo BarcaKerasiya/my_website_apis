@@ -60,6 +60,7 @@ export const getAllBlogs = async (req: Request, res: Response) => {
 
     console.log("query", query);
     const blogs = await Blog.find(query)
+      .sort({ createdAt: -1 })
       .populate({
         path: "authorIds",
         select: "name jobTitle", // Populate only the 'name' field of the Author document

@@ -69,6 +69,7 @@ const getAllBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         console.log("query", query);
         const blogs = yield Blog_1.default.find(query)
+            .sort({ createdAt: -1 })
             .populate({
             path: "authorIds",
             select: "name jobTitle", // Populate only the 'name' field of the Author document
