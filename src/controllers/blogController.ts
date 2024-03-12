@@ -58,7 +58,6 @@ export const getAllBlogs = async (req: Request, res: Response) => {
       query.title = new RegExp(regexString, "i");
     }
 
-    console.log("query", query);
     const blogs = await Blog.find(query)
       .sort({ createdAt: -1 })
       .populate({

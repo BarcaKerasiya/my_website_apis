@@ -67,7 +67,6 @@ const getAllBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             // Create the regular expression
             query.title = new RegExp(regexString, "i");
         }
-        console.log("query", query);
         const blogs = yield Blog_1.default.find(query)
             .sort({ createdAt: -1 })
             .populate({
