@@ -21,7 +21,7 @@ const authorRoutes_1 = __importDefault(require("./routes/authorRoutes"));
 const tagRoutes_1 = __importDefault(require("./routes/tagRoutes"));
 const blogRoutes_1 = __importDefault(require("./routes/blogRoutes"));
 const cors_1 = __importDefault(require("cors"));
-console.log("I'm in");
+// console.log("I'm in");
 const app = (0, express_1.default)();
 // Middleware
 app.use(express_1.default.json());

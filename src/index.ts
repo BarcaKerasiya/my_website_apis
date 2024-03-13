@@ -7,7 +7,7 @@ import authorRoutes from "./routes/authorRoutes";
 import tagRoutes from "./routes/tagRoutes";
 import blogRoutes from "./routes/blogRoutes";
 import cors from "cors";
-console.log("I'm in");
+// console.log("I'm in");
 const app = express();
 // Middleware
 app.use(express.json());
