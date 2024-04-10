@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import authorRoutes from "./routes/authorRoutes";
 import tagRoutes from "./routes/tagRoutes";
 import blogRoutes from "./routes/blogRoutes";
+import contactMeRoutes from "./routes/contactMeRoutes";
 import cors from "cors";
 // console.log("I'm in");
 const app = express();
@@ -25,6 +26,7 @@ app.get("/ping", (_req: Request, res: Response) => {
 app.use("/api", authorRoutes);
 app.use("/api", tagRoutes);
 app.use("/api", blogRoutes);
+app.use("/api", contactMeRoutes);
 
 // Connect to MongoDB
 const conncetDB = async () => {
