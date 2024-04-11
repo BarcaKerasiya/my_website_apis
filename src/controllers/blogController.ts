@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Blog, { IBlog } from "../models/Blog";
-import mongoose from "mongoose";
 
 export const createBlog = async (req: Request, res: Response) => {
   try {
@@ -14,9 +13,7 @@ export const createBlog = async (req: Request, res: Response) => {
       tagIds,
       minutesToRead,
     });
-    console.log("up");
     const savedBlog = await blog.save();
-    console.log("down", savedBlog);
     res.status(201).json(savedBlog);
   } catch (error) {
     res
@@ -42,11 +39,15 @@ export const deleteBlog = async (req: Request, res: Response) => {
   }
 };
 export const getAllBlogs = async (req: Request, res: Response) => {
-  const { search_query } = req.query;
+  const { search_query, tag } = req.query;
+  console.log("search_query", search_query);
+  console.log("tag", tag);
   try {
     // Define the type of the query object
-    let query: { title?: RegExp } = {};
-    if (typeof search_query === "string") {
+    let query: { title?: RegExp; tagIds?: any } = {};
+    if (typeof search_query === "string" && search_query !== "") {
+      console.log("search query");
+
       // Split the search query string by spaces
       const searchWords = search_query.split(" ");
 
@@ -55,9 +56,23 @@ export const getAllBlogs = async (req: Request, res: Response) => {
       const regexString = regexPatterns.join("");
 
       // Create the regular expression
-      query.title = new RegExp(regexString, "i");
+      // query.title = new RegExp(regexString, "i");
+      query = {
+        ...query,
+        title: new RegExp(regexString, "i"), // Assuming tagIds is an array field
+      };
     }
 
+    // Handle tag query
+    if (tag !== "clearAll" && tag !== "" && tag !== undefined) {
+      console.log("tag");
+      query = {
+        ...query,
+        tagIds: tag, // Assuming tagIds is an array field
+      };
+    }
+
+    console.log("query", query);
     const blogs = await Blog.find(query)
       .sort({ createdAt: -1 })
       .populate({

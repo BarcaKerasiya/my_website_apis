@@ -25,9 +25,7 @@ const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             tagIds,
             minutesToRead,
         });
-        console.log("up");
         const savedBlog = yield blog.save();
-        console.log("down", savedBlog);
         res.status(201).json(savedBlog);
     }
     catch (error) {
@@ -54,19 +52,29 @@ const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.deleteBlog = deleteBlog;
 const getAllBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { search_query } = req.query;
+    const { search_query, tag } = req.query;
+    console.log("search_query", search_query);
+    console.log("tag", tag);
     try {
         // Define the type of the query object
         let query = {};
-        if (typeof search_query === "string") {
+        if (typeof search_query === "string" && search_query !== "") {
+            console.log("search query");
             // Split the search query string by spaces
             const searchWords = search_query.split(" ");
             // Construct a regular expression to match each word individually
             const regexPatterns = searchWords.map((word) => `(?=.*${word})`);
             const regexString = regexPatterns.join("");
             // Create the regular expression
-            query.title = new RegExp(regexString, "i");
+            // query.title = new RegExp(regexString, "i");
+            query = Object.assign(Object.assign({}, query), { title: new RegExp(regexString, "i") });
         }
+        // Handle tag query
+        if (tag !== "clearAll" && tag !== "" && tag !== undefined) {
+            console.log("tag");
+            query = Object.assign(Object.assign({}, query), { tagIds: tag });
+        }
+        console.log("query", query);
         const blogs = yield Blog_1.default.find(query)
             .sort({ createdAt: -1 })
             .populate({
