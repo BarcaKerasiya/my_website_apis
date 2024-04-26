@@ -3,34 +3,8 @@ import { Request, Response } from "express";
 import Joi from "joi";
 import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/User";
+import userSchema from "../validations/user";
 
-interface AuthenticatedRequest extends Request {
-    userId?: string; // Define userId property
-}
-
-const userSchema = Joi.object({
-    f_name: Joi.string().required().messages({
-        'string.base': `'First name' should be a type of 'text'`,
-        'string.empty': `First name cannot be an empty field`,
-        'any.required': `First name is a required field`
-      }),
-    l_name: Joi.string().required().messages({
-        'string.base': `Last name should be a type of 'text'`,
-        'string.empty': `Last name cannot be an empty field`,
-        'any.required': `Last name is a required field`
-      }),
-    email: Joi.string().email().required().messages({
-        'string.base': `'Email' should be a type of 'email'`,
-        'string.empty': `Email cannot be an empty field`,
-        'any.required': `Email is a required field`
-      }),
-    password: Joi.string().min(6).required().messages({
-        'string.base': `'Password' should be a type of 'text'`,
-        'string.empty': `Password cannot be an empty field`,
-        'string.length':`Password must be 6 or more characters`,
-        'any.required': `Password is a required field`
-      })
-})
 
 export const createUser = async (req: Request, res: Response) => {
     try {
@@ -60,14 +34,7 @@ export const createUser = async (req: Request, res: Response) => {
             const savedUser = await user.save();
             // console.log("savedAuthor", savedAuthor);
 
-            // Generate JWt token 
-            jwt.sign({ user}, 'your_secret_key', { expiresIn: '300s' }, (err: any, token) => {
-                res.json({
-                    token
-                })
-            }); // Change 'your_secret_key' to your actual secret key
-
-            // res.status(201).json({user: savedUser, token});
+            
         }
     } catch (error) {
         res
@@ -77,39 +44,28 @@ export const createUser = async (req: Request, res: Response) => {
 };
 
 export const verifyToken = (req: Request, res: Response, next: any) => {
+    // const bearerHeader = req.headers['Authorization'];
+    // if(typeof bearerHeader !== 'undefined'){
 
+    // }else{
+    //     res.send({
+    //         result:'token is not valid'
+    //     })
+    // }
 }
-// export const verifyToken = (req: Request, res:Response, next: Function) => {
-//     const token = req.headers.authorization;
-
-//     if (!token) {
-//         return res.status(401).json({ error: "Unauthorized: No token provided" });
-//     }
-
-//     jwt.verify(token, 'your_secret_key', (err: any, decoded:any) => {
-//         if (err) {
-//             return res.status(401).json({ error: "Unauthorized: Invalid token" });
-//         }
-
-//         // req.userId = decoded.userId; // Store decoded userId in request object for further use
-        
-//         const authenticatedReq = req as AuthenticatedRequest;
-//         authenticatedReq.userId = decoded.userId; // Store decoded userId in request object for further use
-        
-//         next();
-//     });
-// };
 
 
-export const getUser = async (verifyToken: any, req: Request, res: Response) => {
+export const getUser = async ( req: Request, res: Response) => {
     try{
         const { email, password} = req.body;
         const login = await User.find({ email : email})
         console.log(login, "okayyyyy")
         if(login.length === 1){
             if(login[0].password === password){
+                const token = jwt.sign({ email}, 'your_secret_key', { expiresIn: '300s' });
                 res.status(200).json({
-                    message: "Login Successfully!"
+                    message: "Login Successfully!",
+                    token
                 })
             }
             else{
@@ -123,6 +79,15 @@ export const getUser = async (verifyToken: any, req: Request, res: Response) => 
                 error: "Invalid email, user not exists"
             })
         }
+        const user = {
+            email,
+            password
+        }
+        jwt.sign({ user}, 'your_secret_key', { expiresIn: '300s' }, (err: any, token) => {
+            res.json({
+                token
+            })
+        });
     }
     catch{
         res

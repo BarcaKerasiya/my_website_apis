@@ -3,10 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userSchema = void 0;
 // src/validations/authorController.ts
 const joi_1 = __importDefault(require("joi"));
-exports.userSchema = joi_1.default.object({
+const userSchema = joi_1.default.object({
     f_name: joi_1.default.string().required().messages({
         'string.base': `'First name' should be a type of 'text'`,
         'string.empty': `First name cannot be an empty field`,
@@ -29,4 +28,5 @@ exports.userSchema = joi_1.default.object({
         'any.required': `Password is a required field`
     })
 });
-//# sourceMappingURL=userController.js.map
+exports.default = userSchema;
+//# sourceMappingURL=user.js.map

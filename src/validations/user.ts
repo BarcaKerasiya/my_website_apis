@@ -1,7 +1,7 @@
 // src/validations/authorController.ts
 import Joi from "joi";
 
-export const userSchema = Joi.object({
+const userSchema = Joi.object({
     f_name: Joi.string().required().messages({
         'string.base': `'First name' should be a type of 'text'`,
         'string.empty': `First name cannot be an empty field`,
@@ -24,3 +24,5 @@ export const userSchema = Joi.object({
         'any.required': `Password is a required field`
       })
 })
+
+export default userSchema
