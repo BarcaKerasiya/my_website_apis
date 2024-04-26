@@ -29,6 +29,7 @@ const contactMeSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
     message: { type: String, required: true },
+    IPAddress: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
 });
 exports.default = mongoose_1.default.model("ContactMe", contactMeSchema);

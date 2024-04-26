@@ -29,6 +29,7 @@ const authorSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     status: { type: String, required: true },
     jobTitle: { type: String, required: true },
+    IPAddress: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
 });
 exports.default = mongoose_1.default.model("Author", authorSchema);

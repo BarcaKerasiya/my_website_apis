@@ -33,6 +33,7 @@ const blogSchema = new mongoose_1.Schema({
     authorIds: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Author" }],
     tagIds: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Tag" }],
     minutesToRead: { type: Number, required: true },
+    IPAddress: { type: String, required: true },
 });
 exports.default = mongoose_1.default.model("Blog", blogSchema);
 //# sourceMappingURL=Blog.js.map

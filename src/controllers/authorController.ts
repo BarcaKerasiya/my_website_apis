@@ -3,13 +3,16 @@ import { Request, Response } from "express";
 import Author, { IAuthor } from "../models/Author";
 
 export const createAuthor = async (req: Request, res: Response) => {
+  console.log("req", req.ip);
   try {
     const { name, status, jobTitle } = req.body;
+    const IP = req.ip;
     // console.log(name, status, jobTitle);
     const author = new Author({
       name,
       status,
       jobTitle,
+      IP,
     });
     // console.log("author", author);
     const savedAuthor = await author.save();

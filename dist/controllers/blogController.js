@@ -24,6 +24,7 @@ const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             authorIds,
             tagIds,
             minutesToRead,
+            IPAddress: req.ip,
         });
         console.log("up");
         const savedBlog = yield blog.save();
@@ -31,6 +32,7 @@ const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(201).json(savedBlog);
     }
     catch (error) {
+        console.log("error", error);
         res
             .status(500)
             .json({ error: "An error occurred while creating the blog." });

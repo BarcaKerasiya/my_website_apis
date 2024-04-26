@@ -15,13 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateAuthor = exports.getAuthorById = exports.getAllAuthors = exports.deleteAuthor = exports.createAuthor = void 0;
 const Author_1 = __importDefault(require("../models/Author"));
 const createAuthor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("req", req.ip);
     try {
         const { name, status, jobTitle } = req.body;
+        const IP = req.ip;
         // console.log(name, status, jobTitle);
         const author = new Author_1.default({
             name,
             status,
             jobTitle,
+            IP,
         });
         // console.log("author", author);
         const savedAuthor = yield author.save();

@@ -27,6 +27,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const tagSchema = new mongoose_1.Schema({
     tagName: { type: String, required: true },
     status: { type: String, required: true },
+    IPAddress: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 });

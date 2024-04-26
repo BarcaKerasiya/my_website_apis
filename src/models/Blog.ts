@@ -9,6 +9,7 @@ export interface IBlog extends Document {
   authorIds: string[];
   tagIds: string[];
   minutesToRead: number;
+  IPAddress: string;
 }
 
 const blogSchema: Schema = new Schema({
@@ -20,6 +21,7 @@ const blogSchema: Schema = new Schema({
   authorIds: [{ type: Schema.Types.ObjectId, ref: "Author" }],
   tagIds: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   minutesToRead: { type: Number, required: true },
+  IPAddress: { type: String, required: true },
 });
 
 export default mongoose.model<IBlog>("Blog", blogSchema);

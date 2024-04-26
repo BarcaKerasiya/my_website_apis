@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface Itag extends Document {
   tagName: string;
   status: string;
+  IPAddress: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -10,6 +11,7 @@ export interface Itag extends Document {
 const tagSchema: Schema = new Schema({
   tagName: { type: String, required: true },
   status: { type: String, required: true },
+  IPAddress: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

@@ -13,12 +13,14 @@ export const createBlog = async (req: Request, res: Response) => {
       authorIds,
       tagIds,
       minutesToRead,
+      IPAddress: req.ip,
     });
     console.log("up");
     const savedBlog = await blog.save();
     console.log("down", savedBlog);
     res.status(201).json(savedBlog);
   } catch (error) {
+    console.log("error", error);
     res
       .status(500)
       .json({ error: "An error occurred while creating the blog." });
