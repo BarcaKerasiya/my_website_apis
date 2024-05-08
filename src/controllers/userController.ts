@@ -43,17 +43,6 @@ export const createUser = async (req: Request, res: Response) => {
     }
 };
 
-export const verifyToken = (req: Request, res: Response, next: any) => {
-    // const bearerHeader = req.headers['Authorization'];
-    // if(typeof bearerHeader !== 'undefined'){
-
-    // }else{
-    //     res.send({
-    //         result:'token is not valid'
-    //     })
-    // }
-}
-
 
 export const getUser = async ( req: Request, res: Response) => {
     try{
@@ -79,15 +68,6 @@ export const getUser = async ( req: Request, res: Response) => {
                 error: "Invalid email, user not exists"
             })
         }
-        const user = {
-            email,
-            password
-        }
-        jwt.sign({ user}, 'your_secret_key', { expiresIn: '300s' }, (err: any, token) => {
-            res.json({
-                token
-            })
-        });
     }
     catch{
         res

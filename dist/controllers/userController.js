@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = exports.verifyToken = exports.createUser = void 0;
+exports.getUser = exports.createUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const User_1 = __importDefault(require("../models/User"));
 const user_1 = __importDefault(require("../validations/user"));
@@ -50,16 +50,6 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createUser = createUser;
-const verifyToken = (req, res, next) => {
-    // const bearerHeader = req.headers['Authorization'];
-    // if(typeof bearerHeader !== 'undefined'){
-    // }else{
-    //     res.send({
-    //         result:'token is not valid'
-    //     })
-    // }
-};
-exports.verifyToken = verifyToken;
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
@@ -84,15 +74,6 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 error: "Invalid email, user not exists"
             });
         }
-        const user = {
-            email,
-            password
-        };
-        jsonwebtoken_1.default.sign({ user }, 'your_secret_key', { expiresIn: '300s' }, (err, token) => {
-            res.json({
-                token
-            });
-        });
     }
     catch (_a) {
         res

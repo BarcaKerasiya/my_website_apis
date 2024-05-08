@@ -4,7 +4,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IUser extends Document {
   f_name: string;
   l_name: string;
-  enail: string;
+  email: string;
   password: string;
   createdAt: Date;
 }

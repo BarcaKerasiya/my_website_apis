@@ -6,11 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/authorRoutes.ts
 const express_1 = __importDefault(require("express"));
 const authorController_1 = require("../controllers/authorController");
+const verifyToken_1 = require("../middlewares/verifyToken");
 const router = express_1.default.Router();
-router.post("/authors", authorController_1.createAuthor);
-router.delete("/authors/:id", authorController_1.deleteAuthor);
-router.get("/authors", authorController_1.getAllAuthors);
-router.get("/authors/:id", authorController_1.getAuthorById);
-router.put("/authors/:id", authorController_1.updateAuthor);
+router.post("/authors", verifyToken_1.verifyToken, authorController_1.createAuthor);
+router.delete("/authors/:id", verifyToken_1.verifyToken, authorController_1.deleteAuthor);
+router.get("/authors", verifyToken_1.verifyToken, authorController_1.getAllAuthors);
+router.get("/authors/:id", verifyToken_1.verifyToken, authorController_1.getAuthorById);
+router.put("/authors/:id", verifyToken_1.verifyToken, authorController_1.updateAuthor);
 exports.default = router;
 //# sourceMappingURL=authorRoutes.js.map

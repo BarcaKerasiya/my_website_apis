@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import Author, { IAuthor } from "../models/Author";
 
+
 export const createAuthor = async (req: Request, res: Response) => {
   try {
     const { name, status, jobTitle } = req.body;
