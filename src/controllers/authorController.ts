@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import Author, { IAuthor } from "../models/Author";
 
+
 export const createAuthor = async (req: Request, res: Response) => {
   console.log("req", req.ip);
   try {

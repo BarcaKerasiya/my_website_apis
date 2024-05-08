@@ -44,7 +44,7 @@ app.use("/api", user_1.default);
 // Connect to MongoDB
 const conncetDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const MONGO_URL = `mongodb+srv://BlueMarron:${process.env.MONGO_PASSWORD}@bluemarron.496xb.mongodb.net/my_website?retryWrites=true&w=majority`;
+        const MONGO_URL = `mongodb+srv://BlueMarron:${process.env.MONGO_PASSWORD}@bluemarron.496xb.mongodb.net/my_website_dev?retryWrites=true&w=majority`;
         yield mongoose_1.default.connect(MONGO_URL);
         console.log("Connected to MongoDB");
     }

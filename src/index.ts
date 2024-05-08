@@ -32,7 +32,7 @@ app.use("/api", userRoutes);
 // Connect to MongoDB
 const conncetDB = async () => {
   try {
-    const MONGO_URL = `mongodb+srv://BlueMarron:${process.env.MONGO_PASSWORD}@bluemarron.496xb.mongodb.net/my_website?retryWrites=true&w=majority`;
+    const MONGO_URL = `mongodb+srv://BlueMarron:${process.env.MONGO_PASSWORD}@bluemarron.496xb.mongodb.net/my_website_dev?retryWrites=true&w=majority`;
 
     await mongoose.connect(MONGO_URL);
     console.log("Connected to MongoDB");
