@@ -7,10 +7,10 @@ import userRoutes from "./user";
 
 const router = express.Router();
 
-router.use("/authors", authorRoutes);
-router.use("/tags", tagRoutes);
-router.use("/blogs", blogRoutes);
-router.use("/users", userRoutes);
-router.use("/contact", contactMeRoutes);
+router.use("/", authorRoutes);
+router.use("/", tagRoutes);
+router.use("/", blogRoutes);
+router.use("/", userRoutes);
+router.use("/", contactMeRoutes);
 
 export default router;
