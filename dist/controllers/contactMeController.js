@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.contactMe = void 0;
+exports.getAllContactData = exports.contactMe = void 0;
 const ContactMe_1 = __importDefault(require("../models/ContactMe"));
 const contactMe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -34,4 +34,14 @@ const contactMe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.contactMe = contactMe;
+const getAllContactData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const tags = yield ContactMe_1.default.find();
+        res.status(200).json(tags);
+    }
+    catch (error) {
+        res.status(500).json({ error: "An error occurred while retrieving tags" });
+    }
+});
+exports.getAllContactData = getAllContactData;
 //# sourceMappingURL=contactMeController.js.map

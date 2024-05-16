@@ -7,5 +7,6 @@ const express_1 = __importDefault(require("express"));
 const contactMeController_1 = require("../controllers/contactMeController");
 const router = express_1.default.Router();
 router.post("/contact-me", contactMeController_1.contactMe);
+router.get("/contacts", contactMeController_1.getAllContactData);
 exports.default = router;
 //# sourceMappingURL=contactMeRoutes.js.map

@@ -1,8 +1,12 @@
 import express from "express";
-import { contactMe } from "../controllers/contactMeController";
+import {
+  contactMe,
+  getAllContactData,
+} from "../controllers/contactMeController";
 
 const router = express.Router();
 
 router.post("/contact-me", contactMe);
+router.get("/contacts", getAllContactData);
 
 export default router;

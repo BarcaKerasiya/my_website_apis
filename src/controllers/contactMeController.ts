@@ -20,3 +20,12 @@ export const contactMe = async (req: Request, res: Response) => {
       .json({ error: "An error occurred while creating the author." });
   }
 };
+
+export const getAllContactData = async (req: Request, res: Response) => {
+  try {
+    const tags = await ContactMe.find();
+    res.status(200).json(tags);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while retrieving tags" });
+  }
+};
