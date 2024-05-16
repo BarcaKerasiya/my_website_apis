@@ -1,4 +1,4 @@
-// src/validations/authorController.ts
+// src/validations/user.ts
 import Joi from "joi";
 
 const userSchema = Joi.object({

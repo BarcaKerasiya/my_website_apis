@@ -51,10 +51,14 @@ export const getUser = async ( req: Request, res: Response) => {
         console.log(login, "okayyyyy")
         if(login.length === 1){
             if(login[0].password === password){
-                const token = jwt.sign({ email}, 'your_secret_key', { expiresIn: '300s' });
+                // const token = jwt.sign({ email}, 'your_secret_key', { expiresIn: '300s' });
+                const accessToken = jwt.sign({email}, 'Access_secret_key' ,{ expiresIn: '1d'});
+                const refreshToken = jwt.sign({ email }, 'refresh_secret_key', { expiresIn: '10d'});
                 res.status(200).json({
                     message: "Login Successfully!",
-                    token
+                    // token,
+                    accessToken,
+                    refreshToken
                 })
             }
             else{
