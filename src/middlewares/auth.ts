@@ -6,8 +6,11 @@ interface JwtPayload {
   id: string;
 }
 
+interface NewRequest extends Request {
+  user: any;
+}
 export const protect = async (
-  req: Request,
+  req: NewRequest,
   res: Response,
   next: NextFunction
 ) => {
