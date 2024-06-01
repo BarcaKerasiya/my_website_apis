@@ -18,7 +18,6 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.use("/api", router);
-app.use("/api/auth", authRoutes);
 app.use(errorHandler);
 
 conncetDB();
