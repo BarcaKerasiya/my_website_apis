@@ -1,10 +1,10 @@
 import express from "express";
+import authRoutes from "./authRoutes";
 import authorRoutes from "./authorRoutes";
 import tagRoutes from "./tagRoutes";
 import blogRoutes from "./blogRoutes";
 import contactMeRoutes from "./contactMeRoutes";
 import userRoutes from "./user";
-import authRoutes from "./authRoutes";
 
 const router = express.Router();
 

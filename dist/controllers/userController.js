@@ -22,19 +22,16 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
         }
-        const { f_name, l_name, email, password } = req.body;
+        const { name, email, password } = req.body;
         // console.log(name, status, jobTitle);
         const signin = yield User_1.default.find({ email: email });
         console.log(signin, "hellooooo");
         if (signin.length > 0) {
-            res
-                .status(400)
-                .json({ error: "Email already exists." });
+            res.status(400).json({ error: "Email already exists." });
         }
         else {
             const user = new User_1.default({
-                f_name,
-                l_name,
+                name,
                 email,
                 password,
             });
@@ -58,24 +55,28 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (login.length === 1) {
             if (login[0].password === password) {
                 // const token = jwt.sign({ email}, 'your_secret_key', { expiresIn: '300s' });
-                const accessToken = jsonwebtoken_1.default.sign({ email }, 'Access_secret_key', { expiresIn: '1d' });
-                const refreshToken = jsonwebtoken_1.default.sign({ email }, 'refresh_secret_key', { expiresIn: '10d' });
+                const accessToken = jsonwebtoken_1.default.sign({ email }, "Access_secret_key", {
+                    expiresIn: "1d",
+                });
+                const refreshToken = jsonwebtoken_1.default.sign({ email }, "refresh_secret_key", {
+                    expiresIn: "10d",
+                });
                 res.status(200).json({
                     message: "Login Successfully!",
                     // token,
                     accessToken,
-                    refreshToken
+                    refreshToken,
                 });
             }
             else {
                 res.status(400).json({
-                    error: "Incorrect password."
+                    error: "Incorrect password.",
                 });
             }
         }
         else {
             res.status(400).json({
-                error: "Invalid email, user not exists"
+                error: "Invalid email, user not exists",
             });
         }
     }

@@ -13,7 +13,7 @@ const cookieOptions = {
 };
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { f_name, l_name, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -23,8 +23,7 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 
   const user = await User.create({
-    f_name,
-    l_name,
+    name,
     email,
     password,
   });
@@ -44,8 +43,7 @@ export const registerUser = async (req: Request, res: Response) => {
     res.status(201).json({
       _id: user._id,
       email: user.email,
-      f_name: user.f_name,
-      l_name: user.l_name,
+      name: user.name,
     });
   } else {
     res.status(400);

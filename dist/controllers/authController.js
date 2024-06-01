@@ -22,15 +22,14 @@ const cookieOptions = {
     sameSite: "strict",
 };
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { f_name, l_name, email, password } = req.body;
+    const { name, email, password } = req.body;
     const userExists = yield User_1.default.findOne({ email });
     if (userExists) {
         res.status(400);
         throw new Error("User already exists");
     }
     const user = yield User_1.default.create({
-        f_name,
-        l_name,
+        name,
         email,
         password,
     });
@@ -42,8 +41,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(201).json({
             _id: user._id,
             email: user.email,
-            f_name: user.f_name,
-            l_name: user.l_name,
+            name: user.name,
         });
     }
     else {

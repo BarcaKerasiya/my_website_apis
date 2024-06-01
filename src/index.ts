@@ -5,7 +5,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./routes/index";
 import { errorHandler } from "./middlewares/errorHandler";
-import authRoutes from "./routes/authRoutes";
 import { conncetDB } from "./config/db";
 const app = express();
 
