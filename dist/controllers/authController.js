@@ -16,37 +16,54 @@ exports.refreshAccessToken = exports.authUser = exports.registerUser = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const generateTokens_1 = require("../utils/generateTokens");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const user_1 = __importDefault(require("../validations/user"));
 const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
 };
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password } = req.body;
-    const userExists = yield User_1.default.findOne({ email });
-    if (userExists) {
-        res.status(400);
-        throw new Error("User already exists");
-    }
-    const user = yield User_1.default.create({
-        name,
-        email,
-        password,
-    });
-    if (user) {
-        const accessToken = (0, generateTokens_1.generateAccessToken)(user._id);
-        const refreshToken = (0, generateTokens_1.generateRefreshToken)(user._id);
-        res.cookie("accessToken", accessToken, Object.assign(Object.assign({}, cookieOptions), { maxAge: 15 * 60 * 1000 }));
-        res.cookie("refreshToken", refreshToken, Object.assign(Object.assign({}, cookieOptions), { maxAge: 7 * 24 * 60 * 60 * 1000 }));
-        res.status(201).json({
-            _id: user._id,
-            email: user.email,
-            name: user.name,
+    try {
+        // // Validate input data
+        const { error } = user_1.default.validate(req.body);
+        if (error) {
+            res.status(400);
+            throw new Error(error.details[0].message);
+        }
+        const { name, email, password } = req.body;
+        // Check if user already exists
+        const userExists = yield User_1.default.findOne({ email });
+        if (userExists) {
+            res.status(400);
+            throw new Error("User already exists");
+        }
+        // Create a new user
+        const user = yield User_1.default.create({
+            name,
+            email,
+            password,
         });
+        if (user) {
+            // Generate tokens
+            const accessToken = (0, generateTokens_1.generateAccessToken)(user._id);
+            const refreshToken = (0, generateTokens_1.generateRefreshToken)(user._id);
+            // Set cookies
+            res.cookie("accessToken", accessToken, Object.assign(Object.assign({}, cookieOptions), { maxAge: 15 * 60 * 1000 }));
+            res.cookie("refreshToken", refreshToken, Object.assign(Object.assign({}, cookieOptions), { maxAge: 7 * 24 * 60 * 60 * 1000 }));
+            // Send response
+            res.status(201).json({
+                _id: user._id,
+                email: user.email,
+                name: user.name,
+            });
+        }
+        else {
+            res.status(400);
+            throw new Error("Invalid user data");
+        }
     }
-    else {
-        res.status(400);
-        throw new Error("Invalid user data");
+    catch (err) {
+        return res.status(500).json({ message: err.message });
     }
 });
 exports.registerUser = registerUser;

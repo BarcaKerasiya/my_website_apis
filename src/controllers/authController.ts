@@ -5,6 +5,7 @@ import {
   generateRefreshToken,
 } from "../utils/generateTokens";
 import jwt from "jsonwebtoken";
+import userSchema from "../validations/user";
 
 const cookieOptions = {
   httpOnly: true,
@@ -13,41 +14,56 @@ const cookieOptions = {
 };
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  try {
+    // // Validate input data
+    const { error } = userSchema.validate(req.body);
+    if (error) {
+      res.status(400);
+      throw new Error(error.details[0].message);
+    }
+    const { name, email, password } = req.body;
 
-  const userExists = await User.findOne({ email });
+    // Check if user already exists
+    const userExists = await User.findOne({ email });
 
-  if (userExists) {
-    res.status(400);
-    throw new Error("User already exists");
-  }
-
-  const user = await User.create({
-    name,
-    email,
-    password,
-  });
-
-  if (user) {
-    const accessToken = generateAccessToken(user._id);
-    const refreshToken = generateRefreshToken(user._id);
-
-    res.cookie("accessToken", accessToken, {
-      ...cookieOptions,
-      maxAge: 15 * 60 * 1000, // 15 minutes
+    if (userExists) {
+      res.status(400);
+      throw new Error("User already exists");
+    }
+    // Create a new user
+    const user = await User.create({
+      name,
+      email,
+      password,
     });
-    res.cookie("refreshToken", refreshToken, {
-      ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-    res.status(201).json({
-      _id: user._id,
-      email: user.email,
-      name: user.name,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Invalid user data");
+
+    if (user) {
+      // Generate tokens
+      const accessToken = generateAccessToken(user._id);
+      const refreshToken = generateRefreshToken(user._id);
+
+      // Set cookies
+      res.cookie("accessToken", accessToken, {
+        ...cookieOptions,
+        maxAge: 15 * 60 * 1000, // 15 minutes
+      });
+      res.cookie("refreshToken", refreshToken, {
+        ...cookieOptions,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
+      // Send response
+      res.status(201).json({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
 };
 

@@ -20,6 +20,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const { error } = user_1.default.validate(req.body);
         if (error) {
+            console.log("error", error);
             return res.status(400).json({ error: error.details[0].message });
         }
         const { name, email, password } = req.body;

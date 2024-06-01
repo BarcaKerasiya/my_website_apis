@@ -9,6 +9,7 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const { error } = userSchema.validate(req.body);
     if (error) {
+      console.log("error", error);
       return res.status(400).json({ error: error.details[0].message });
     }
 
