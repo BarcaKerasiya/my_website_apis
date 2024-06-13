@@ -42,6 +42,7 @@ const userSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    isVerified: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
 });
 userSchema.pre("save", function (next) {

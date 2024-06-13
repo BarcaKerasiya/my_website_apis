@@ -6,6 +6,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  isVerified: boolean;
   createdAt: Date;
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
@@ -14,6 +15,7 @@ const userSchema: Schema<IUser> = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 
