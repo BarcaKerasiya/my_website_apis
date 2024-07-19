@@ -7,16 +7,16 @@ import {
 import jwt from "jsonwebtoken";
 import userSchema from "../validations/user";
 import nodemailer from "nodemailer";
+
 const cookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+  secure: process.env.NODE_ENV === "production",
   sameSite: "strict" as const,
 };
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
     // // Validate input data
-    console.log("req.body", req.body);
     const { error } = userSchema.validate(req.body);
     if (error) {
       res.status(400);
@@ -26,6 +26,10 @@ export const registerUser = async (req: Request, res: Response) => {
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
+    if (userExists && userExists.isVerified === true) {
+      res.status(400);
+      throw new Error("Email is already taken!");
+    }
 
     // Create a new user
     let userData;
@@ -46,60 +50,6 @@ export const registerUser = async (req: Request, res: Response) => {
       message:
         "Registration successful. Please check your email to verify your account.",
     });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
-};
-export const registerUserBackup = async (req: Request, res: Response) => {
-  try {
-    // // Validate input data
-    const { error } = userSchema.validate(req.body);
-    if (error) {
-      res.status(400);
-      throw new Error(error.details[0].message);
-    }
-    const { name, email, password } = req.body;
-
-    // Check if user already exists
-    const userExists = await User.findOne({ email });
-
-    if (userExists) {
-      res.status(400);
-      throw new Error("User already exists");
-    }
-    // Create a new user
-    const user = await User.create({
-      name,
-      email,
-      password,
-      isVerified: false,
-    });
-
-    if (user) {
-      // Generate tokens
-      const accessToken = generateAccessToken(user._id);
-      const refreshToken = generateRefreshToken(user._id);
-
-      // Set cookies
-      res.cookie("accessToken", accessToken, {
-        ...cookieOptions,
-        maxAge: 15 * 60 * 1000, // 15 minutes
-      });
-      res.cookie("refreshToken", refreshToken, {
-        ...cookieOptions,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
-
-      // Send response
-      res.status(201).json({
-        _id: user._id,
-        email: user.email,
-        name: user.name,
-      });
-    } else {
-      res.status(400);
-      throw new Error("Invalid user data");
-    }
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -169,15 +119,31 @@ const sendVerificationEmail = async (user: any, token: string) => {
     },
   });
   const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: user.email,
-    subject: "Email Verification",
-    html: `<p>Hi ${user.name},</p>
-           <p>Please click the link below to verify your email address:</p>
-           <a href="${verificationUrl}">Verify Email</a>
-           <p>If you did not request this, please ignore this email.</p>`,
+    subject: "Email Verification - Action Required",
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <p>Dear ${user.name},</p>
+  
+        <p>We hope this message finds you well. To complete your registration and verify your email address, please click on the link below:</p>
+        
+        <p style="text-align: center;">
+          <a href="${verificationUrl}" style="display: inline-block; padding: 10px 20px; margin: 10px 0; font-size: 16px; color: #fff; background-color: #007BFF; text-decoration: none; border-radius: 5px;">Verify Your Email</a>
+        </p>
+        
+        <p>If you did not initiate this request, please disregard this email. Rest assured, no further action is required on your part.</p>
+  
+        <p>Thank you for your attention to this matter.</p>
+        
+        <p>Best regards,<br>
+        Vishnu Kerasiya</p>
+      </div>
+    `,
   };
+
   await transporter.sendMail(mailOptions);
 };
 const generateEmailVerificationToken = (userId: string) => {
@@ -200,21 +166,28 @@ export const verifyEmail = async (
       throw new Error("No token provided or invalid token format");
     }
 
-    const decoded: any = jwt.verify(
-      token,
-      process.env.EMAIL_VERIFICATION_SECRET as string
-    );
-    console.log("decoded", decoded);
+    const secret = process.env.EMAIL_VERIFICATION_SECRET;
+    if (!secret) {
+      throw new Error("EMAIL_VERIFICATION_SECRET is not set");
+    }
+
+    let decoded: any;
+    try {
+      decoded = jwt.verify(token, secret);
+    } catch (error) {
+      if (error instanceof jwt.JsonWebTokenError) {
+        return res.status(400).json({ message: "Invalid token" });
+      }
+      throw error;
+    }
+
     const user = await User.findById(decoded.userId);
-    console.log("user", user);
     if (!user) {
-      res.status(400);
-      throw new Error("Invalid token");
+      return res.status(400).json({ message: "Invalid token" });
     }
 
     if (user.isVerified) {
-      res.status(400);
-      throw new Error("User already verified");
+      return res.status(400).json({ message: "User already verified" });
     }
 
     user.isVerified = true;
@@ -222,12 +195,6 @@ export const verifyEmail = async (
 
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
-
-    const cookieOptions = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict" as const,
-    };
 
     res.cookie("accessToken", accessToken, {
       ...cookieOptions,

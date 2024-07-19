@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/register", asyncHandler(registerUser));
 router.get("/verify-email", asyncHandler(verifyEmail));
-router.post("/login", authUser);
-router.post("/refresh-token", refreshAccessToken);
+router.post("/login", asyncHandler(authUser));
+router.post("/refresh-token", asyncHandler(refreshAccessToken));
 
 export default router;
