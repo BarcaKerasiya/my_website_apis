@@ -28,6 +28,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // app.use(express.)
 app.use((0, cors_1.default)({ origin: "*" }));
+console.log("hii");
 // http://localhost:3000/api/authors
 app.get("/", (_req, res) => {
     return res.send("Express Typescript on Vercel");

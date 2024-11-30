@@ -14,6 +14,7 @@ const app = express();
 app.use(express.json());
 // app.use(express.)
 app.use(cors({ origin: "*" }));
+console.log("hii");
 // http://localhost:3000/api/authors
 
 app.get("/", (_req: Request, res: Response) => {
