@@ -29,27 +29,28 @@ const app = (0, express_1.default)();
 // Middleware
 app.use(express_1.default.json());
 // app.use(express.)
-// app.use(cors({ origin: "*" }));
+app.use((0, cors_1.default)({ origin: "*" }));
 // List of allowed origins
-const allowedOrigins = [
-    "https://vishnukerasiya.com",
-    "http://localhost:5173", // Local development frontend (adjust port if needed)
-];
-// Middleware to allow multiple origins
-app.use((0, cors_1.default)({
-    origin: function (origin, callback) {
-        if (allowedOrigins.includes(origin) || !origin) {
-            // Allow requests with no origin (like Postman)
-            callback(null, true);
-        }
-        else {
-            // Reject requests from disallowed origins
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-}));
+// const allowedOrigins = [
+//   "https://vishnukerasiya.com", // Production frontend
+//   "http://localhost:5173", // Local development frontend (adjust port if needed)
+// ];
+// // Middleware to allow multiple origins
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (allowedOrigins.includes(origin) || !origin) {
+//         // Allow requests with no origin (like Postman)
+//         callback(null, true);
+//       } else {
+//         // Reject requests from disallowed origins
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//   })
+// );
 app.use((req, res, next) => {
-    res.setHeader("Permissions-Policy", 'autoplay=(self "http://localhost:5173" "https://vishnukerasiya.com/")');
+    res.setHeader("Permissions-Policy", 'autoplay=(self "http://localhost:5173" "https://vishnukerasiya.com")');
     next();
 });
 app.use("/public", express_1.default.static(path_1.default.join(__dirname, "public")));

@@ -15,32 +15,32 @@ const app = express();
 // Middleware
 app.use(express.json());
 // app.use(express.)
-// app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*" }));
 // List of allowed origins
-const allowedOrigins = [
-  "https://vishnukerasiya.com", // Production frontend
-  "http://localhost:5173", // Local development frontend (adjust port if needed)
-];
+// const allowedOrigins = [
+//   "https://vishnukerasiya.com", // Production frontend
+//   "http://localhost:5173", // Local development frontend (adjust port if needed)
+// ];
 
-// Middleware to allow multiple origins
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (allowedOrigins.includes(origin) || !origin) {
-        // Allow requests with no origin (like Postman)
-        callback(null, true);
-      } else {
-        // Reject requests from disallowed origins
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-  })
-);
+// // Middleware to allow multiple origins
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (allowedOrigins.includes(origin) || !origin) {
+//         // Allow requests with no origin (like Postman)
+//         callback(null, true);
+//       } else {
+//         // Reject requests from disallowed origins
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//   })
+// );
 
 app.use((req, res, next) => {
   res.setHeader(
     "Permissions-Policy",
-    'autoplay=(self "http://localhost:5173" "https://vishnukerasiya.com/")'
+    'autoplay=(self "http://localhost:5173" "https://vishnukerasiya.com")'
   );
   next();
 });
